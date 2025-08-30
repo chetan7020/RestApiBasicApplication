@@ -1,7 +1,8 @@
 package com.learn.restapibasic;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -26,7 +27,14 @@ public class TodoController {
     }
 
     @GetMapping("/todos")
-    public List<Todo> getTodos(){
-        return todoList;
+    public ResponseEntity<List<Todo>> getTodos(){
+        return ResponseEntity.status(HttpStatus.OK).body(todoList);
+    }
+
+    @PostMapping("/todos")
+//    @ResponseStatus(HttpStatus.CREATED) - can be used to set status code in case of succeses
+    public ResponseEntity<Todo> createTodo(@RequestBody Todo newTodo){
+        todoList.add(newTodo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
     }
 }
