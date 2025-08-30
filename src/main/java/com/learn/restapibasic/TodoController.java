@@ -32,13 +32,17 @@ public class TodoController {
     }
 
     @GetMapping("/todos/{todoID}")
-    public ResponseEntity<Todo> getTodo(@PathVariable Long todoID){
+    public ResponseEntity<?> getTodo(@PathVariable int todoID){
         for(Todo todo : todoList){
             if(todo.getId() == todoID){
                 return ResponseEntity.status(HttpStatus.OK).body(todo);
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "todo with id : " + todoID + " not found");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @PostMapping("/todos")
