@@ -27,28 +27,24 @@ public class TodoController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<Todo>> getTodos(){
-        return ResponseEntity.status(HttpStatus.OK).body(todoList);
+    public ResponseEntity<ApiResponse<List<Todo>>> getTodos(){
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todoList, null));
     }
 
     @GetMapping("/todos/{todoID}")
-    public ResponseEntity<?> getTodo(@PathVariable int todoID){
+    public ResponseEntity<ApiResponse<Todo>> getTodo(@PathVariable int todoID){
         for(Todo todo : todoList){
             if(todo.getId() == todoID){
-                return ResponseEntity.status(HttpStatus.OK).body(todo);
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
             }
         }
-
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "todo with id : " + todoID + " not found");
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id : " + todoID + " not found"));
     }
 
     @PostMapping("/todos")
 //    @ResponseStatus(HttpStatus.CREATED) - can be used to set status code in case of succeses
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo newTodo){
+    public ResponseEntity<ApiResponse<Todo>> createTodo(@RequestBody Todo newTodo){
         todoList.add(newTodo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, newTodo, null));
     }
 }
