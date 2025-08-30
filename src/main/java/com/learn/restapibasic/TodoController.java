@@ -31,6 +31,16 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.OK).body(todoList);
     }
 
+    @GetMapping("/todos/{todoID}")
+    public ResponseEntity<Todo> getTodo(@PathVariable Long todoID){
+        for(Todo todo : todoList){
+            if(todo.getId() == todoID){
+                return ResponseEntity.status(HttpStatus.OK).body(todo);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     @PostMapping("/todos")
 //    @ResponseStatus(HttpStatus.CREATED) - can be used to set status code in case of succeses
     public ResponseEntity<Todo> createTodo(@RequestBody Todo newTodo){
