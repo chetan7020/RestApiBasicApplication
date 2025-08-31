@@ -1,5 +1,5 @@
 package com.learn.restapibasic;
 
 public record ApiResponse<T>(
-        boolean isSuccess, T data, String errorMessage
+        Boolean isSuccess, T data, String errorMessage
 ){}

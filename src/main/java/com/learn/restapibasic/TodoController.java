@@ -32,14 +32,14 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todoList, null));
     }
 
-    @GetMapping("/{todoID}")
-    public ResponseEntity<ApiResponse<Todo>> getTodo(@PathVariable int todoID){
+    @GetMapping("/{todoId}")
+    public ResponseEntity<ApiResponse<Todo>> getTodo(@PathVariable int todoId){
         for(Todo todo : todoList){
-            if(todo.getId() == todoID){
+            if(todo.getId() == todoId){
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id : " + todoID + " not found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id : " + todoId + " not found"));
     }
 
     @PostMapping("/")
@@ -47,5 +47,52 @@ public class TodoController {
     public ResponseEntity<ApiResponse<Todo>> createTodo(@RequestBody Todo newTodo){
         todoList.add(newTodo);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, newTodo, null));
+    }
+
+
+    // patch
+    @PatchMapping("/")
+    public ResponseEntity<ApiResponse<Todo>> patchTodo(@RequestBody Todo updateTodo){
+        for(Todo todo : todoList){
+            if(todo.getId().equals(updateTodo.getId())){
+                if(todo.getCompleted() != null){
+                    todo.setCompleted(updateTodo.getCompleted());
+                }
+
+                if(todo.getTitle() != null){
+                    todo.setTitle(updateTodo.getTitle());
+                }
+
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
+    }
+    
+    //put
+    @PutMapping("/")
+    public ResponseEntity<ApiResponse<Todo>> putTodo(@RequestBody Todo updateTodo){
+        for(Todo todo : todoList){
+            if(todo.getId().equals(updateTodo.getId())){
+                todo = updateTodo;
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
+    }
+    
+    // delete
+    @DeleteMapping("/")
+    public ResponseEntity<ApiResponse<Todo>> deleteTodo(@RequestBody Todo updateTodo){
+        for(Todo todo : todoList){
+            if(todo.getId().equals(updateTodo.getId())){
+                todoList.remove(todo);
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
     }
 }
