@@ -1,25 +1,26 @@
 package com.learn.restapibasic;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-/*
- *  first line of defence
- * responsibilities
- *   collect request
- *   send response - whatever we have returned that is automatically converted into response object
- * */
 @RestController
 @RequestMapping("/api/v1/todos")
 public class TodoController {
+
+    private ITodoService todoService;
     private static List<Todo> todoList;
 
+    public TodoController(
+            @Qualifier("TodoService") ITodoService todoService){
 
-    public TodoController(){
+        this.todoService = todoService;
         todoList = new ArrayList<>();
+
+        System.out.println(todoService.doSomething());
 
         todoList.add(new Todo(1, false, "Todo 1", 1));
         todoList.add(new Todo(2, true, "Todo 2", 2));
@@ -28,12 +29,13 @@ public class TodoController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<ApiResponse<List<Todo>>> getTodos(){
+    public ResponseEntity<ApiResponse<List<Todo>>> getTodos(@RequestParam(required = false) Boolean isCompleted){
+        System.out.println("is completed : " + isCompleted);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todoList, null));
     }
 
     @GetMapping("/{todoId}")
-    public ResponseEntity<ApiResponse<Todo>> getTodo(@PathVariable int todoId){
+    public ResponseEntity<ApiResponse<Todo>> getTodo(@PathVariable() int todoId){
         for(Todo todo : todoList){
             if(todo.getId() == todoId){
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
