@@ -84,7 +84,7 @@ public class TodoController {
     }
     
     // delete
-    @DeleteMapping("/")
+    @DeleteMapping("/{todoId}")
     public ResponseEntity<ApiResponse<Todo>> deleteTodo(@PathVariable int todoId){
         for(Todo todo : todoList){
             if(todo.getId().equals(todoId)){
