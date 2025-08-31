@@ -67,7 +67,7 @@ public class TodoController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not found"));
     }
     
     //put
@@ -80,19 +80,19 @@ public class TodoController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not found"));
     }
     
     // delete
     @DeleteMapping("/")
-    public ResponseEntity<ApiResponse<Todo>> deleteTodo(@RequestBody Todo updateTodo){
+    public ResponseEntity<ApiResponse<Todo>> deleteTodo(@PathVariable int todoId){
         for(Todo todo : todoList){
-            if(todo.getId().equals(updateTodo.getId())){
+            if(todo.getId().equals(todoId)){
                 todoList.remove(todo);
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, todo, null));
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + updateTodo.getId() + " not fopund"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, null, "todo with id " + todoId + " not found"));
     }
 }
